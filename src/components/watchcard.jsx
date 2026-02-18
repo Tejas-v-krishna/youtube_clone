@@ -2,8 +2,10 @@ import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { closeMenu } from "../utils/appSlice";
+import { addToHistory } from "../utils/historySlice";
 import { FaUserCircle } from "react-icons/fa";
 import { BiLike, BiDislike, BiShare, BiDownload } from "react-icons/bi";
+import { YOUTUBE_VIDEOS_API } from "../utils/constants";
 
 export default function WatchPage() {
     const { id } = useParams();
@@ -11,7 +13,26 @@ export default function WatchPage() {
 
     useEffect(() => {
         dispatch(closeMenu());
-    }, []);
+        getVideoDetails();
+    }, [id]);
+
+    const getVideoDetails = async () => {
+        const apiKey = import.meta.env.VITE_YOUTUBE_API_KEY;
+        if (!apiKey) return;
+
+        const url = `https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2Cstatistics&id=${id}&key=${apiKey}`;
+
+        try {
+            const data = await fetch(url);
+            const json = await data.json();
+
+            if (json.items && json.items.length > 0) {
+                dispatch(addToHistory(json.items[0]));
+            }
+        } catch (error) {
+            console.error("Error fetching video details:", error);
+        }
+    };
 
     // Mock Comments Data
     const commentsData = [

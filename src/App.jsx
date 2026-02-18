@@ -8,6 +8,7 @@ import VideoContainer from "./components/VideoContainer";
 import WatchPage from "./components/watchcard";
 
 import SearchPage from "./components/SearchPage";
+import HistoryPage from "./components/HistoryPage";
 
 // Layout Component
 const AppLayout = () => {
@@ -38,6 +39,10 @@ const appRouter = createBrowserRouter([
       {
         path: "results",
         element: <div className="flex-1 overflow-y-auto w-full"><SearchPage /></div>,
+      },
+      {
+        path: "history",
+        element: <div className="flex-1 overflow-y-auto w-full"><HistoryPage /></div>,
       },
     ],
   },
