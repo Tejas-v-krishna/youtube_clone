@@ -2,14 +2,19 @@ import React from 'react';
 
 
 function VideoCard({ video }) {
-    if (!video) return <div>Loading...</div>;
+    if (!video) return null;
+    const thumbnail = video?.snippet?.thumbnails?.medium?.url || video?.snippet?.thumbnails?.default?.url;
 
     return (
         <div className="w-72 m-2 cursor-pointer">
             <div className="w-full relative">
                 <img
-                    src={video.snippet.thumbnails.medium.url}
-                    alt={video.snippet.title}
+                    src={thumbnail}
+                    alt={video?.snippet?.title}
+                    onError={(e) => {
+                        console.warn("Thumbnail load failed, using fallback:", thumbnail);
+                        e.target.src = "https://via.placeholder.com/320x180?text=No+Thumbnail";
+                    }}
                     className="w-full rounded-xl hover:rounded-none transition-all duration-300"
                 />
             </div>
